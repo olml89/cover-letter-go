@@ -1,16 +1,16 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+	"github.com/gin-gonic/gin"
+	"github.com/olml89/cover-letter-go/template/http"
 )
 
 func main() {
-	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
-		fmt.Fprintf(writer, "Hello, world!")
-	})
+	env := LoadEnv()
 
-	if err := http.ListenAndServe(":80", nil); err != nil {
-		fmt.Println("Server error: ", err)
-	}
+	r := gin.Default()
+
+	r.POST("/templates", http.PostTemplate)
+
+	r.Run(":" + env.ServerPort)
 }
