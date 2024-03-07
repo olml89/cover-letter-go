@@ -6,6 +6,7 @@ FROM golang:${GOLANG_VERSION}-alpine AS build-env
 RUN go install github.com/go-delve/delve/cmd/dlv@latest
 
 COPY ./src /go/src
+COPY .env /go/.env
 WORKDIR /go/src
 
 # Compile the application with the optimizations turned off
@@ -18,6 +19,7 @@ FROM alpine
 WORKDIR /
 COPY --from=build-env /go/bin/dlv /
 COPY --from=build-env /go/bin/app /
+COPY --from=build-env /go/.env /
 
 RUN chmod +x /dlv
 RUN chmod +x /app
