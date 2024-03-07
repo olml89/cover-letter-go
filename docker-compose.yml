@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  go:
+    container_name: go
+    build:
+      dockerfile: Dockerfile
+      args:
+        GOLANG_VERSION: ${GOLANG_VERSION}
+    ports:
+      - ${SERVER_PORT}:80
+      - ${DEBUG_PORT}:40000
+    security_opt:
+      - "seccomp:unconfined"
+    cap_add:
+      - SYS_PTRACE
+    command: /dlv --headless --listen=:${DEBUG_PORT} --api-version=2 exec ./app
